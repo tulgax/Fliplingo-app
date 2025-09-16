@@ -120,3 +120,29 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Utility: animated shimmer for text (uses currentColor for tint) */
+@keyframes shimmer-text-move {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@layer utilities {
+  .shimmer-text {
+    background-image: linear-gradient(
+      90deg,
+      currentColor 20%,
+      color-mix(in oklch, currentColor 70%, white 30%) 40%,
+      currentColor 60%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer-text-move 1.5s linear infinite;
+  }
+}

@@ -1,10 +1,13 @@
 'use client'
 
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { CheckCircle2, Zap } from 'lucide-react'
+import { TextShimmer } from '@/components/ui/text-shimmer'
+import confetti from 'canvas-confetti'
+import { toast } from 'sonner'
 
 type Stage = 'idle' | 'uploading' | 'translating' | 'transforming' | 'done'
 
@@ -14,6 +17,11 @@ export const EpubUploadFlow = () => {
   const [fileName, setFileName] = useState<string | null>(null)
   const [fileSize, setFileSize] = useState<string>('')
   const inputRef = useRef<HTMLInputElement | null>(null)
+  const percentRef = useRef(0)
+
+  useEffect(() => {
+    percentRef.current = percent
+  }, [percent])
 
   const label = useMemo(() => {
     switch (stage) {
@@ -30,11 +38,14 @@ export const EpubUploadFlow = () => {
     }
   }, [stage])
 
-  const animate = useCallback(async (durationMs: number) => {
+  const animateTo = useCallback(async (targetPercent: number, durationMs: number) => {
+    const start = percentRef.current
+    const delta = Math.max(0, targetPercent - start)
     const steps = 100
     const delay = Math.max(10, Math.floor(durationMs / steps))
     for (let i = 0; i <= steps; i++) {
-      setPercent(i)
+      const next = Math.min(100, Math.round(start + (delta * i) / steps))
+      setPercent(next)
       // eslint-disable-next-line no-await-in-loop
       await new Promise((r) => setTimeout(r, delay))
     }
@@ -43,18 +54,23 @@ export const EpubUploadFlow = () => {
   const simulateProgress = useCallback(async () => {
     // Simulate upload progress
     setStage('uploading')
-    setPercent(0)
-    await animate(1500)
+    await animateTo(20, 1500)
     // Translating: 5 seconds
     setStage('translating')
-    setPercent(0)
-    await animate(5000)
+    await animateTo(70, 5000)
     // Transforming: 10 seconds
     setStage('transforming')
-    setPercent(0)
-    await animate(10000)
+    await animateTo(100, 10000)
     setStage('done')
-  }, [animate])
+    toast.success('Translation completed!', { description: 'Your EPUB is ready to view.', position: 'bottom-right' })
+    confetti({
+      particleCount: 120,
+      spread: 70,
+      origin: { y: 0.2 },
+      scalar: 0.9,
+      colors: ['#22c55e', '#10b981', '#34d399'],
+    })
+  }, [animateTo])
 
   const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files || files.length === 0) return
@@ -114,7 +130,13 @@ export const EpubUploadFlow = () => {
           <Progress value={percent} indicatorClassName="bg-emerald-500" />
           <div className="mt-2 flex items-center gap-2 text-emerald-500">
             <Zap className="h-5 w-5" />
-            <span className="text-sm">{label}</span>
+            {stage === 'done' ? (
+              <span className="text-sm">{label}</span>
+            ) : (
+              <TextShimmer as="span" duration={1.2} className="text-sm">
+                {label}
+              </TextShimmer>
+            )}
           </div>
         </div>
       )}
