@@ -2,6 +2,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { FolderClosed, Menu, Upload, Zap } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
+import { UserMenu } from '@/components/user-menu'
 
 export const Sidebar = async () => {
   const supabase = await createClient()
@@ -55,13 +56,7 @@ export const Sidebar = async () => {
         </Link>
         {isAuthed ? (
           <div className="flex w-full flex-col items-center gap-2">
-            <div className="h-10 w-10 overflow-hidden rounded-full border border-border">
-              {avatarUrl ? (
-                <Image src={avatarUrl} alt="User avatar" width={40} height={40} />
-              ) : (
-                <Image src="/vercel.svg" alt="User avatar" width={40} height={40} className="dark:invert" />
-              )}
-            </div>
+            <UserMenu email={email} avatarUrl={avatarUrl} />
             <span className="max-w-[8rem] truncate text-xs text-muted-foreground" title={email}>
               {email}
             </span>
