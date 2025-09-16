@@ -11,7 +11,12 @@ import { toast } from 'sonner'
 
 type Stage = 'idle' | 'uploading' | 'translating' | 'transforming' | 'done'
 
-export const EpubUploadFlow = () => {
+type UploadProps = {
+  sourceLang?: string
+  targetLang?: string
+}
+
+export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
   const [stage, setStage] = useState<Stage>('idle')
   const [percent, setPercent] = useState(0)
   const [fileName, setFileName] = useState<string | null>(null)
@@ -108,7 +113,17 @@ export const EpubUploadFlow = () => {
           </div>
         </div>
         {stage !== 'done' ? (
-          <Button size="sm" onClick={() => inputRef.current?.click()} aria-label="Choose EPUB">
+          <Button
+            size="sm"
+            onClick={() => {
+              if (!sourceLang || !targetLang) {
+                toast.error('Please select both Source and Target languages', { position: 'bottom-right' })
+                return
+              }
+              inputRef.current?.click()
+            }}
+            aria-label="Choose EPUB"
+          >
             {stage === 'idle' ? 'Choose EPUB' : 'Change file'}
           </Button>
         ) : (
