@@ -43,7 +43,7 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
         options: {},
       })
       if (error) throw error
-      router.push('/translate')
+      router.push('/dashboard')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {

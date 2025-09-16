@@ -35,8 +35,8 @@ export function LoginForm({ className, ...props }: React.ComponentPropsWithoutRe
         password,
       })
       if (error) throw error
-      // Redirect to translate page after successful login
-      router.push('/translate')
+      // Redirect to dashboard after successful login
+      router.push('/dashboard')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
