@@ -40,12 +40,10 @@ export function SignUpForm({ className, ...props }: React.ComponentPropsWithoutR
       const { error } = await supabase.auth.signUp({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/translate`,
-        },
+        options: {},
       })
       if (error) throw error
-      router.push('/auth/sign-up-success')
+      router.push('/translate')
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
