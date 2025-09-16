@@ -1,0 +1,33 @@
+---
+globs: *.ts,*.tsx
+---
+
+### React + TypeScript Conventions
+
+- **Components**:
+
+  - Use function components with explicit prop types or `React.PropsWithChildren` where appropriate.
+  - Prefer Server Components by default in `app/`; mark Client Components with `"use client"` only when necessary.
+
+- **Naming**:
+
+  - Event handlers: `handleClick`, `handleKeyDown`, etc.
+  - Descriptive names over abbreviations for variables and functions.
+
+- **Styling**:
+
+  - Tailwind classes only; avoid separate CSS files.
+  - Use `cn()` from [src/lib/utils.ts](mdc:src/lib/utils.ts) for conditional classes.
+
+- **Accessibility**:
+
+  - Provide `aria-*` attributes and keyboard handlers for interactive elements; ensure focus styles.
+
+- **Code style**:
+
+  - Prefer early returns to reduce nesting.
+  - Avoid unnecessary try/catch; handle error cases meaningfully.
+  - Keep exports and public APIs typed; avoid `any`.
+
+- **Imports**:
+  - Use path aliases (e.g., `@/components/...`) as defined in [tsconfig.json](mdc:tsconfig.json).

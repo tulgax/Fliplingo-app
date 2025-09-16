@@ -1,0 +1,35 @@
+---
+alwaysApply: true
+---
+
+### UI, Branding, and shadcn/ui Usage
+
+- **Design system**:
+
+  - Tailwind v4 with tokens defined in [src/app/globals.css](mdc:src/app/globals.css).
+  - Base color is "neutral" per [components.json](mdc:components.json). Adjust tokens in `:root`/`.dark` for branding.
+
+- **Branding**:
+
+  - Prefer the company purple palette for primary accents where applicable.
+  - Use the company logo from `public/` when needed, ensuring accessible alt text.
+
+- **shadcn/ui**:
+
+  - Use `pnpm dlx shadcn@latest add <component>` to scaffold primitives into `src/components/ui/`.
+  - Style: `new-york`, Icons: `lucide`.
+  - Server Components are supported (`rsc: true`). Keep UI primitives server-friendly; move client-only logic into Client Components.
+
+- **Imports & Aliases**:
+
+  - `@/components/ui/*` for shadcn components
+  - `@/lib/utils` for `cn()` helper
+
+- **Accessibility**:
+
+  - Ensure keyboard navigability and aria-attributes for interactive elements.
+  - Use semantic elements; only add roles when necessary.
+
+- **Tailwind conventions**:
+  - Prefer utility classes; avoid custom CSS files.
+  - Use `cn()` for conditional classes.

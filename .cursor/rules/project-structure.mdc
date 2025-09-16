@@ -1,0 +1,44 @@
+---
+alwaysApply: true
+---
+
+### Project Structure Guide
+
+- **App Router entrypoints**:
+
+  - Layout: [src/app/layout.tsx](mdc:src/app/layout.tsx)
+  - Home page: [src/app/page.tsx](mdc:src/app/page.tsx)
+  - Example protected route: [src/app/protected/page.tsx](mdc:src/app/protected/page.tsx)
+
+- **Global styles & Tailwind v4**:
+
+  - Tailwind is v4 and imported in [src/app/globals.css](mdc:src/app/globals.css) with `@import "tailwindcss";`
+  - Design tokens (CSS variables) live in `:root` and `.dark` within the same file.
+
+- **Utilities**:
+
+  - Classname merge helper: [src/lib/utils.ts](mdc:src/lib/utils.ts) exports `cn(...)` using `clsx` and `tailwind-merge`.
+
+- **shadcn/ui configuration**:
+
+  - Config: [components.json](mdc:components.json)
+    - `style`: "new-york"
+    - `rsc`: true (prefer Server Components by default)
+    - `iconLibrary`: "lucide"
+    - `aliases`: `components`, `ui`, `lib`, `hooks`, `utils`
+    - `tailwind.css`: `src/app/globals.css`
+
+- **TypeScript paths**:
+
+  - `@/*` → `./src/*` in [tsconfig.json](mdc:tsconfig.json). Use alias imports instead of long relative paths.
+
+- **Recommended local structure** (for consistency with shadcn aliases):
+
+  - `src/components/` — app components
+  - `src/components/ui/` — shadcn-generated primitives
+  - `src/lib/` — utilities, clients, constants
+  - `src/hooks/` — reusable hooks
+
+- **Notes**:
+  - Keep component styles in Tailwind classes; avoid standalone CSS files. Leverage tokens from `globals.css`.
+  - Use `cn()` for conditional class names.
