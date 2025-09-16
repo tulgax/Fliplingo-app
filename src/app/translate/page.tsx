@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
+import { LanguageCombobox } from '@/components/language-combobox'
 
 export default async function TranslatePage() {
   return (
@@ -15,41 +16,13 @@ export default async function TranslatePage() {
           <CardContent className="p-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
-                <Label htmlFor="source">Source Language</Label>
-                <select
-                  id="source"
-                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                  defaultValue="mn"
-                  aria-label="Source language"
-                >
-                  <option value="mn">Mongolian (Монгол)</option>
-                  <option value="en">English</option>
-                </select>
+                <Label>Source Language</Label>
+                <LanguageCombobox buttonClassName="w-full" />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="target">Target Language</Label>
-                <select
-                  id="target"
-                  className="h-10 w-full rounded-md border border-input bg-background px-3 text-sm"
-                  defaultValue="en"
-                  aria-label="Target language"
-                >
-                  <option value="en">English</option>
-                  <option value="mn">Mongolian (Монгол)</option>
-                </select>
+                <Label>Target Language</Label>
+                <LanguageCombobox buttonClassName="w-full" />
               </div>
-            </div>
-
-            <div className="mt-6">
-              <details className="text-sm text-muted-foreground">
-                <summary className="cursor-pointer select-none">Advanced options</summary>
-                <div className="mt-3 grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <div>
-                    <Label className="text-xs">Keep formatting</Label>
-                    <input type="checkbox" className="ml-2 align-middle" aria-label="Keep formatting" />
-                  </div>
-                </div>
-              </details>
             </div>
 
             <div className="mt-8">
@@ -65,9 +38,7 @@ export default async function TranslatePage() {
                 <p className="mt-4 text-lg font-medium">Drop document files here</p>
                 <p className="text-sm text-muted-foreground">or click to browse from your computer</p>
                 <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
-                  <span className="rounded-md border px-2 py-1">PDF</span>
-                  <span className="rounded-md border px-2 py-1">DOCX</span>
-                  <span className="rounded-md border px-2 py-1">TXT</span>
+                  <span className="rounded-md border px-2 py-1">EPUB</span>
                   <span className="rounded-md border px-2 py-1">and more...</span>
                 </div>
                 <Button className="mt-6" aria-label="Upload">Upload</Button>
