@@ -1,16 +1,8 @@
-import { redirect } from 'next/navigation'
-import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
 
 export default async function TranslatePage() {
-  const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-  if (!data?.claims) {
-    redirect('/auth/login')
-  }
-
   return (
     <main className="min-h-svh w-full bg-background text-foreground flex items-start justify-center p-6">
       <div className="w-full max-w-5xl">

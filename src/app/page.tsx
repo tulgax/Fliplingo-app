@@ -1,15 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Menu, FolderClosed, Upload, Zap } from "lucide-react";
-import { redirect } from "next/navigation";
-import { createClient } from "@/lib/supabase/server";
-
-export default async function Home() {
-  const supabase = await createClient();
-  const { data } = await supabase.auth.getClaims();
-  if (data?.claims) {
-    redirect("/translate");
-  }
+export default function Home() {
   return (
     <div className="min-h-svh w-full bg-background text-foreground">
       {/* Sidebar */}
