@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { FolderClosed, Menu, Upload, Zap } from 'lucide-react'
 import { createClient } from '@/lib/supabase/server'
 import { UserMenu } from '@/components/user-menu'
+import { SidebarNav } from '@/components/sidebar-nav'
 
 export const Sidebar = async () => {
   const supabase = await createClient()
@@ -21,27 +22,7 @@ export const Sidebar = async () => {
           <Menu className="h-5 w-5" />
         </button>
 
-        <nav className="flex w-full flex-col items-center gap-4">
-          <Link
-            href="#files"
-            className="group flex w-full flex-col items-center gap-2 rounded-xl px-3 py-3 text-center text-sm text-muted-foreground hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-label="Files"
-            tabIndex={0}
-          >
-            <FolderClosed className="h-6 w-6" />
-            <span>Files</span>
-          </Link>
-          <Link
-            href="#upload"
-            className="group flex w-full flex-col items-center gap-2 rounded-xl bg-foreground/10 px-3 py-3 text-center text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-            aria-current="page"
-            aria-label="Upload"
-            tabIndex={0}
-          >
-            <Upload className="h-6 w-6" />
-            <span>Upload</span>
-          </Link>
-        </nav>
+        <SidebarNav />
       </div>
 
       <div className="flex w-full flex-col items-center gap-6">

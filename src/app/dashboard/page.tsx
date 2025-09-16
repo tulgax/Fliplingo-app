@@ -13,6 +13,7 @@ export default async function TranslatePage() {
             <CardDescription>Upload documents to translate them to another language</CardDescription>
           </CardHeader>
           <CardContent className="p-6 pt-0">
+            <div id="files" className="mb-2"></div>
             <TranslateSection />
           </CardContent>
         </Card>
