@@ -19,7 +19,7 @@ export default async function TranslatePage() {
           <p className="text-sm text-muted-foreground">Upload documents to translate them to another language</p>
         </div>
 
-        <Card className="border-dashed">
+        <Card className="border-dashed" id="upload">
           <CardContent className="p-6">
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
               <div className="space-y-2">
