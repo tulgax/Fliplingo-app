@@ -15,12 +15,17 @@ export const Sidebar = async () => {
   return (
     <aside className="fixed left-0 top-0 z-20 flex h-svh w-40 flex-col items-center justify-between border-r border-border bg-foreground/5 px-3 py-6">
       <div className="flex w-full flex-col items-center gap-8">
-        <button
-          aria-label="Open menu"
-          className="flex h-10 w-10 items-center justify-center rounded-md hover:bg-foreground/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        <Link
+          href="/dashboard"
+          aria-label="Home"
+          className="flex h-12 w-24 items-center justify-center"
         >
-          <Menu className="h-5 w-5" />
-        </button>
+          <img
+            src="https://zkprxfzgywsqzhqcbisk.supabase.co/storage/v1/object/public/Branding/White%20Logo.svg"
+            alt="Logo"
+            className="h-36 w-auto"
+          />
+        </Link>
 
         <SidebarNav />
       </div>
