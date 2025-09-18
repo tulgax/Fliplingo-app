@@ -39,7 +39,7 @@ export const UserMenu = ({ email, avatarUrl, name }: Props) => {
           </Avatar>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent side="right" align="start" sideOffset={48} alignOffset={48}  className="min-w-56 data-[side=right]:-translate-y-4">
+      <DropdownMenuContent side="bottom" align="end" sideOffset={8} className="min-w-56">
         <DropdownMenuLabel className="flex items-center gap-3">
           <Avatar className="h-10 w-10">
             <AvatarImage src={avatarUrl} alt="avatar" />
