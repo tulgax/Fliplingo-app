@@ -2,6 +2,7 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { NavbarLinks } from '@/components/navbar-links'
 import { UserMenu } from '@/components/user-menu'
+export const dynamic = 'force-dynamic'
 
 export const Navbar = async () => {
   const supabase = await createClient()
