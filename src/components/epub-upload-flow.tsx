@@ -5,9 +5,12 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
 import { CheckCircle2, Zap } from 'lucide-react'
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog'
+import Link from 'next/link'
 import { TextShimmer } from '@/components/ui/text-shimmer'
 import confetti from 'canvas-confetti'
 import { toast } from 'sonner'
+import { createClient } from '@/lib/supabase/client'
 
 type Stage = 'idle' | 'uploading' | 'translating' | 'transforming' | 'done'
 
@@ -23,6 +26,7 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
   const [fileSize, setFileSize] = useState<string>('')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const percentRef = useRef(0)
+  const [showAuthPrompt, setShowAuthPrompt] = useState(false)
 
   useEffect(() => {
     percentRef.current = percent
@@ -127,7 +131,20 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
             {stage === 'idle' ? 'Choose EPUB' : 'Change file'}
           </Button>
         ) : (
-          <Button size="sm" variant="default" aria-label="View translated">
+          <Button
+            size="sm"
+            variant="default"
+            aria-label="View translated"
+            onClick={async () => {
+              const supabase = createClient()
+              const { data } = await supabase.auth.getUser()
+              if (!data.user) {
+                setShowAuthPrompt(true)
+                return
+              }
+              // TODO: navigate to viewer when implemented
+            }}
+          >
             View
           </Button>
         )}
@@ -155,6 +172,26 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
           </div>
         </div>
       )}
+
+      <AlertDialog open={showAuthPrompt} onOpenChange={setShowAuthPrompt}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Sign in to view your translation</AlertDialogTitle>
+            <AlertDialogDescription>
+              Create an account or sign in to access your translated EPUB and keep your files saved.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={() => setShowAuthPrompt(false)}>Close</AlertDialogCancel>
+            <AlertDialogAction asChild>
+              <Link href="/auth/login">Sign in</Link>
+            </AlertDialogAction>
+            <AlertDialogAction asChild>
+              <Link href="/auth/sign-up">Sign up</Link>
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   )
 }

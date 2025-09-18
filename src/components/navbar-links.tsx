@@ -8,12 +8,12 @@ import { cn } from '@/lib/utils'
 export const NavbarLinks = () => {
   const pathname = usePathname()
   const isFiles = pathname?.startsWith('/dashboard/files')
-  const isUpload = pathname === '/dashboard' || (pathname?.startsWith('/dashboard/') && !isFiles)
+  const isUpload = pathname === '/' || (!isFiles && (pathname?.startsWith('/dashboard') || pathname === '/'))
 
   return (
     <div className="flex items-center gap-1">
       <Link
-        href="/dashboard"
+        href="/"
         className={cn(
           'inline-flex items-center gap-2 rounded-md px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
           isUpload ? 'bg-foreground/10 text-foreground' : 'text-muted-foreground hover:bg-foreground/10'
