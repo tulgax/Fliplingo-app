@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { NavbarLinks } from '@/components/navbar-links'
 import { UserMenu } from '@/components/user-menu'
 
 export const Navbar = async () => {
@@ -10,8 +11,8 @@ export const Navbar = async () => {
   const isAuthed = Boolean(email)
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-border bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="mx-auto flex h-14 w-full max-w-screen-2xl items-center justify-between px-4">
+    <header className="sticky top-0 z-30 w-full border-b border-border bg-foreground/5">
+      <div className="mx-auto flex h-14 w-full max-w-screen-2xl items-center justify-between px-6 md:px-8">
         <Link href="/" aria-label="Home" className="flex items-center gap-2">
           <img
             src="https://zkprxfzgywsqzhqcbisk.supabase.co/storage/v1/object/public/Branding/White%20Logo.svg"
@@ -21,7 +22,7 @@ export const Navbar = async () => {
         </Link>
 
         <nav aria-label="Main" className="flex items-center gap-2">
-          {/* Links are rendered by NavbarLinks in client component when needed */}
+          <NavbarLinks />
         </nav>
 
         <div className="flex items-center gap-2">
@@ -32,6 +33,7 @@ export const Navbar = async () => {
               <Link href="/auth/login" className="rounded-md px-3 py-2 text-sm text-foreground hover:bg-foreground/10">
                 Sign in
               </Link>
+              
               <Link href="/auth/sign-up" className="rounded-md border border-border px-3 py-2 text-sm hover:bg-foreground/5">
                 Sign up
               </Link>
