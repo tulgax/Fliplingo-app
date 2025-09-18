@@ -12,7 +12,7 @@ export const Navbar = async () => {
   const isAuthed = Boolean(email)
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-border bg-foreground/5">
+    <header className="sticky top-0 z-30 w-full border-b border-border bg-background">
       <div className="mx-auto flex h-14 w-full max-w-screen-2xl items-center justify-between px-6 md:px-8">
         <Link href="/" aria-label="Home" className="flex items-center gap-2">
           <img
