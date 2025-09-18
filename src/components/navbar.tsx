@@ -34,10 +34,6 @@ export const Navbar = async () => {
               <Link href="/auth/login" className="rounded-md px-3 py-2 text-sm text-foreground hover:bg-foreground/10">
                 Sign in
               </Link>
-              
-              <Link href="/auth/sign-up" className="rounded-md border border-border px-3 py-2 text-sm hover:bg-foreground/5">
-                Sign up
-              </Link>
             </div>
           )}
         </div>
