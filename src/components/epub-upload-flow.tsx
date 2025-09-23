@@ -11,6 +11,7 @@ import { TextShimmer } from '@/components/ui/text-shimmer'
 import confetti from 'canvas-confetti'
 import { toast } from 'sonner'
 import { createClient } from '@/lib/supabase/client'
+import EpubViewerModal from '@/components/epub-viewer-modal'
 
 type Stage = 'idle' | 'uploading' | 'translating' | 'transforming' | 'done'
 
@@ -27,6 +28,8 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const percentRef = useRef(0)
   const [showAuthPrompt, setShowAuthPrompt] = useState(false)
+  const [viewerOpen, setViewerOpen] = useState(false)
+  const [originalBuffer, setOriginalBuffer] = useState<ArrayBuffer | null>(null)
 
   useEffect(() => {
     percentRef.current = percent
@@ -92,6 +95,13 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
       alert('Please upload an EPUB file')
       return
     }
+    try {
+      const buf = await file.arrayBuffer()
+      setOriginalBuffer(buf)
+    } catch (e) {
+      toast.error('Failed to read file', { position: 'bottom-right' })
+      return
+    }
     await simulateProgress()
   }, [simulateProgress])
 
@@ -142,7 +152,11 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
                 setShowAuthPrompt(true)
                 return
               }
-              // TODO: navigate to viewer when implemented
+              if (!originalBuffer) {
+                toast.error('No file to display', { position: 'bottom-right' })
+                return
+              }
+              setViewerOpen(true)
             }}
           >
             View
@@ -192,6 +206,14 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <EpubViewerModal
+        open={viewerOpen}
+        onOpenChange={setViewerOpen}
+        originalBuffer={originalBuffer}
+        translatedBuffer={originalBuffer}
+        fileName={fileName ?? undefined}
+      />
     </div>
   )
 }
