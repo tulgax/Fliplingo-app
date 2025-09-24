@@ -4,7 +4,7 @@ import { Facebook, Instagram, Linkedin, Youtube } from 'lucide-react'
 export const Footer = () => {
   return (
     <footer className="w-full border-t border-border bg-background">
-      <div className="mx-auto w-full max-w-screen-2xl px-6 py-12 md:px-8">
+      <div className="mx-auto w-full max-w-screen-2xl px-6 pt-12 pb-4 md:px-8">
         <div className="grid grid-cols-1 gap-10 md:grid-cols-3">
           <div className="space-y-3">
             <Link href="/" aria-label="Home" className="inline-flex items-center">
