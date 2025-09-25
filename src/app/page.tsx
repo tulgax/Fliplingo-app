@@ -3,7 +3,7 @@ import { TranslateSection } from '@/components/translate-section'
 
 export default async function HomePage() {
     return (
-        <main className="w-full bg-background text-foreground h-[calc(60vh)] flex items-center justify-center p-6">
+        <main className="w-full bg-background text-foreground min-h-[600px] h-[60vh] flex items-center justify-center p-6">
             <div className="w-full max-w-5xl">
                 <Card id="upload">
                     <CardHeader>
