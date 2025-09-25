@@ -25,7 +25,7 @@ const mockFiles: FileRow[] = [
 
 export default function FilesPage() {
   return (
-    <main className="min-h-svh w-full bg-background text-foreground flex items-start justify-center p-6">
+    <main className="min-h-[60vh] w-full bg-background text-foreground flex items-start justify-center p-6">
       <div className="w-full max-w-5xl">
         <Card>
           <CardHeader>
