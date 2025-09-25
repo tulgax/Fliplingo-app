@@ -63,47 +63,135 @@ export const EpubUploadFlow = ({ sourceLang, targetLang }: UploadProps) => {
     }
   }, [])
 
-  const simulateProgress = useCallback(async () => {
-    // Simulate upload progress
-    setStage('uploading')
-    await animateTo(20, 1500)
-    // Translating: 5 seconds
-    setStage('translating')
-    await animateTo(70, 5000)
-    // Transforming: 10 seconds
-    setStage('transforming')
-    await animateTo(100, 10000)
-    setStage('done')
-    toast.success('Translation completed!', { description: 'Your EPUB is ready to view.', position: 'bottom-right' })
-    confetti({
-      particleCount: 120,
-      spread: 70,
-      origin: { y: 0.2 },
-      scalar: 0.9,
-      colors: ['#22c55e', '#10b981', '#34d399'],
-    })
-  }, [animateTo])
 
   const handleFiles = useCallback(async (files: FileList | null) => {
     if (!files || files.length === 0) return
     const file = files[0]
     setFileName(file.name)
     setFileSize(`${(file.size / 1024 / 1024).toFixed(2)} MB`)
+    
     // Only allow EPUB for now (extension check)
     const isEpub = file.name.toLowerCase().endsWith('.epub') || file.type === 'application/epub+zip'
     if (!isEpub) {
-      alert('Please upload an EPUB file')
+      toast.error('Please upload an EPUB file', { position: 'bottom-right' })
       return
     }
+
+    // Check if user is authenticated
+    const supabase = createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    if (!user) {
+      setShowAuthPrompt(true)
+      return
+    }
+
     try {
+      // Read file buffer
       const buf = await file.arrayBuffer()
       setOriginalBuffer(buf)
+      
+      // Start upload process
+      await uploadToSupabase(file, buf, user.id)
     } catch (e) {
-      toast.error('Failed to read file', { position: 'bottom-right' })
-      return
+      console.error('Upload error:', e)
+      toast.error('Failed to upload file', { position: 'bottom-right' })
+      setStage('idle')
+      setPercent(0)
     }
-    await simulateProgress()
-  }, [simulateProgress])
+  }, [sourceLang, targetLang])
+
+  const uploadToSupabase = useCallback(async (file: File, buffer: ArrayBuffer, userId: string) => {
+    const supabase = createClient()
+    
+    // Start uploading stage
+    setStage('uploading')
+    setPercent(10)
+    
+    try {
+      // Generate unique filename
+      const timestamp = Date.now()
+      const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_')
+      const storagePath = `${userId}/${timestamp}_${sanitizedName}`
+      
+      // Upload file to storage
+      const { data: uploadData, error: uploadError } = await supabase.storage
+        .from('epub-files')
+        .upload(storagePath, buffer, {
+          contentType: 'application/epub+zip',
+          upsert: false
+        })
+      
+      if (uploadError) {
+        throw uploadError
+      }
+      
+      setPercent(30)
+      
+      // Save file metadata to database
+      const { data: fileData, error: dbError } = await supabase
+        .from('files')
+        .insert({
+          user_id: userId,
+          filename: sanitizedName,
+          original_filename: file.name,
+          file_size: file.size,
+          file_type: file.type || 'application/epub+zip',
+          storage_path: storagePath,
+          source_language: sourceLang,
+          target_language: targetLang,
+          translation_status: 'processing'
+        })
+        .select()
+        .single()
+      
+      if (dbError) {
+        // If database save fails, clean up uploaded file
+        await supabase.storage.from('epub-files').remove([storagePath])
+        throw dbError
+      }
+      
+      setPercent(50)
+      
+      // Simulate translation process (in real implementation, this would be actual translation)
+      setStage('translating')
+      await animateTo(80, 3000)
+      
+      setStage('transforming')
+      await animateTo(95, 2000)
+      
+      // Update file status to completed
+      await supabase
+        .from('files')
+        .update({ translation_status: 'completed' })
+        .eq('id', fileData.id)
+      
+      setPercent(100)
+      setStage('done')
+      
+      toast.success('File uploaded and processed successfully!', { 
+        description: 'Your EPUB is ready to view.', 
+        position: 'bottom-right' 
+      })
+      
+      confetti({
+        particleCount: 120,
+        spread: 70,
+        origin: { y: 0.2 },
+        scalar: 0.9,
+        colors: ['#22c55e', '#10b981', '#34d399'],
+      })
+      
+    } catch (error) {
+      console.error('Upload failed:', error)
+      toast.error('Upload failed', { 
+        description: error instanceof Error ? error.message : 'Please try again',
+        position: 'bottom-right' 
+      })
+      setStage('idle')
+      setPercent(0)
+    }
+  }, [animateTo, sourceLang, targetLang])
 
   const uploaded = stage === 'translating' || stage === 'transforming' || stage === 'done'
 
