@@ -6,11 +6,12 @@ export const dynamic = 'force-dynamic'
 
 export const Navbar = async () => {
   const supabase = await createClient()
-  const { data } = await supabase.auth.getClaims()
-  const email = data?.claims?.email as string | undefined
-  const avatarUrl = (data?.claims as any)?.picture as string | undefined
-  const isAuthed = Boolean(email)
-
+  const {
+    data: { user },
+  } = await supabase.auth.getUser()
+  const email = user?.email
+  const avatarUrl = user?.user_metadata?.avatar_url
+  const isAuthed = Boolean(user)
   return (
     <header className="sticky top-0 z-30 w-full border-b border-border bg-background">
       <div className="mx-auto flex h-14 w-full max-w-screen-2xl items-center justify-between px-6 md:px-8">
